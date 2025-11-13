@@ -1,0 +1,30 @@
+// proper
+clc;
+clear;
+close;
+
+// To Design a Low Pass FIR Filter
+wp = input("Enter the pass band edge frequency (radians) = ");
+ws = input("Enter the stop band edge frequency (radians) = ");
+ks = input("Enter the stop band attenuation (dB) = ");
+
+// If 43 < Ks < 54 choose Hamming window
+// To select N order of filter
+N = (2 * %pi * 4) / (ws - wp);     // *4 for Hamming window
+N = ceil(N);                       // To round-off N to the next integer
+wc = (wp + (ws - wp) / 2);         // %pi
+
+// To obtain FIR filter impulse response 'wft'
+// And FIR filter response 'wfm'
+[wft, wfm, fr] = wfir("lp", N + 1, wc / 2, 0, "hm", [0, 0]);
+
+figure(1)
+a = gca();
+a.x_location = "origin";
+a.y_location = "origin";
+a.data_bounds = [0, -150; 1, 50];
+
+plot(2 * fr, 20 * log10(wfm), 'r')
+xlabel("Normalized Digital Frequency w →")
+ylabel("Frequency Response in dB H(jw)")
+title("Frequency Response for Low Pass FIR Filter by USN Name")
